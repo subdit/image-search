@@ -10,6 +10,9 @@ const App = () => {
     event.preventDefault(); // to prevent the refresh in the search box
     console.log(searchInput.current.value); // handle the form submission
   };
+  const handleSelection = selection => {
+    searchInput.current.value = selection;
+  };
 
   return (
     <div className='container'>
@@ -23,6 +26,12 @@ const App = () => {
             ref={searchInput}
           />
         </Form>
+      </div>
+      <div className='filters'>
+        <div onClick={() => handleSelection('nature')}>Nature</div>
+        <div onClick={() => handleSelection('birds')}>Birds</div>
+        <div onClick={() => handleSelection('cats')}>Cats</div>
+        <div onClick={() => handleSelection('Shoes')}>Shoes</div>
       </div>
     </div>
   );
