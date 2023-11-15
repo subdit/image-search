@@ -3,6 +3,6 @@
 ## Technology uses
 
 : React/Vite
-: Unsplash API
-: React Hook
-: Bootstrap
+: Unsplash API: for the images
+: React Hook: useRef.
+: Bootstrap: for styling
