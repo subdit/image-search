@@ -1,17 +1,18 @@
-import React, { useRef } from 'react';
+// import axios from 'axios';
+import { useRef } from 'react';
 
 import { Form } from 'react-bootstrap';
 import './index.css';
 
-const API_URL = 'https://api.unsplash.com/search/photos?page=1&query=office';
+// const API_URL = 'https://api.unsplash.com/search/photos?page=1&query=office';
+// const API_URL = 'https://api.unsplash.com/search/photos';
 
 const App = () => {
   const searchInput = useRef(null); // useRef(hook) to render only one input instead of using useState.
 
   const handleSearch = event => {
     event.preventDefault(); // to prevent the refresh in the search box
-
-    // console.log(searchInput.current.value); // handle the form submission
+    console.log(searchInput.current.value); // handle the form submission
   };
   const handleSelection = selection => {
     searchInput.current.value = selection;
@@ -19,12 +20,12 @@ const App = () => {
 
   return (
     <div className='container'>
-      <h1 className='title'>Search Image</h1>
+      <h1 className='title'>Search Image By Unsplash</h1>
       <div className='search-section'>
-        <Form onSubmit={handleSearch}>
+        <Form onSubmit={handleSearch} type='text' id='name'>
           <Form.Control
             type='search'
-            placeholder='Enter title to search..'
+            placeholder='Enter title to search....'
             className='search-input'
             ref={searchInput}
           />
@@ -34,6 +35,7 @@ const App = () => {
         <div onClick={() => handleSelection('nature')}>Nature</div>
         <div onClick={() => handleSelection('birds')}>Birds</div>
         <div onClick={() => handleSelection('cats')}>Cats</div>
+        <div onClick={() => handleSelection('dog')}>Dogs</div>
         <div onClick={() => handleSelection('Shoes')}>Shoes</div>
       </div>
     </div>
