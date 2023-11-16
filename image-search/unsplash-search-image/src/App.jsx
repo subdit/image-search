@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { Form } from 'react-bootstrap';
 import './index.css';
@@ -8,20 +8,25 @@ const API_URL = 'https://api.unsplash.com/search/photos';
 const IMAGEs_PER_PAGE = 20;
 
 const App = () => {
-  console.log(import.meta.env.VITE_API_KEY);
+  // console.log(import.meta.env.VITE_API_KEY);
 
   const searchInput = useRef(null); // useRef(hook) to render only one input instead of using useState.
 
+  const [images, setImages] = useState([]);
+  const [totalPages, setTotalPages] = useState();
+
   const fetchImages = async () => {
     try {
-      const result = await axios.get(
+      const { data } = await axios.get(
         `${API_URL}?query=${
           searchInput.current.value
         }&page=1&per_page=${IMAGEs_PER_PAGE}&client_id=${
           import.meta.env.VITE_API_KEY
         }`
       );
-      console.log('result', result.data);
+
+      setImages(data.results);
+      setTotalPages(data.total_pages);
     } catch (error) {
       console.log(error);
     }
@@ -39,7 +44,7 @@ const App = () => {
   return (
     <div className='container'>
       <h1 className='title'>Search Image By Unsplash</h1>
-      <h3>Hello..!</h3>
+
       <div className='search-section'>
         <Form onSubmit={handleSearch} type='text' id='name'>
           <Form.Control
@@ -56,6 +61,18 @@ const App = () => {
         <div onClick={() => handleSelection('cats')}>Cats</div>
         <div onClick={() => handleSelection('dog')}>Dogs</div>
         <div onClick={() => handleSelection('Shoes')}>Shoes</div>
+      </div>
+      <div className='images'>
+        {images.map(image => {
+          return (
+            <img
+              key={image.id}
+              src={image.urls.small}
+              alt={image.alt_description}
+              className='image'
+            />
+          );
+        })}
       </div>
     </div>
   );
