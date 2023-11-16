@@ -16,7 +16,7 @@ const App = () => {
 
   return (
     <div className='container'>
-      <h1 className='title'>Search Image</h1>
+      <h1 className='title'>Search Image by Unsplash</h1>
       <div className='search-section'>
         <Form onSubmit={handleSearch}>
           <Form.Control
@@ -31,7 +31,8 @@ const App = () => {
         <div onClick={() => handleSelection('nature')}>Nature</div>
         <div onClick={() => handleSelection('birds')}>Birds</div>
         <div onClick={() => handleSelection('cats')}>Cats</div>
-        <div onClick={() => handleSelection('Shoes')}>Shoes</div>
+        <div onClick={() => handleSelection('dogs')}>Dogs</div>
+        <div onClick={() => handleSelection('shoes')}>Shoes</div>
       </div>
     </div>
   );
