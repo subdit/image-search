@@ -10,6 +10,8 @@ Currently, two official plugins are available:
 ## Technology use
 
 @React/Vite
-: Unsplash API: for the images
-: React Hook: useRef.
-: Bootstrap: for styling
+: Build an application using Unsplash API in React
+: Make API Calls in different scenarios
+: Use useCallback hook to avoid function re-creation
+: Use ESLint to fix application issues
+: Implement Pagination in React
