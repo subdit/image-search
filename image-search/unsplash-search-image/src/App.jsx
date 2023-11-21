@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import './index.css';
 
@@ -10,34 +10,46 @@ const App = () => {
   const searchInput = useRef(null);
   const [images, setImages] = useState([]);
   const [totalImages, setTotalImages] = useState(0); // set up the images
-  const [page, setPage] = useState(1); // set up pagination
+  const [page, setPage] = useState(1); // set up pagination\
 
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     try {
       const { data } = await axios.get(
         `${API_URL}?query=${
           searchInput.current.value
-        }&page=1&per_page=${IMAGES_PER_PAGE}&client_id=${
+        }&page=${page}&per_page=${IMAGES_PER_PAGE}&client_id=${
           import.meta.env.VITE_API_KEY
         }`
       );
-      console.log('results', data);
+      console.log('data', data);
       setImages(data.results);
       setTotalImages(data.total_pages);
     } catch (error) {
       console.log(error);
     }
+  }, [page]);
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages, page]);
+
+  const resetSearch = () => {
+    setPage(1);
+    fetchImages();
   };
 
   const handleSearch = event => {
     event.preventDefault();
     console.log(searchInput.current.value);
-    fetchImages();
+    // fetchImages();
+    // setPage(1);
+    resetSearch();
   };
 
   const handleSelection = selection => {
     searchInput.current.value = selection;
-    fetchImages();
+    // fetchImages();
+    // setPage(1);
+    resetSearch();
   };
 
   return (
@@ -72,8 +84,12 @@ const App = () => {
       </div>
 
       <div className='buttons'>
-        {page > 1 && <Button>Previous</Button>}
-        {page < totalImages && <Button>Next</Button>}
+        {page > 1 && (
+          <Button onClick={() => setPage(page - 1)}>Previous</Button>
+        )}
+        {page < totalImages && (
+          <Button onClick={() => setPage + 1}>Next</Button>
+        )}
       </div>
     </div>
   );
