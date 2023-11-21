@@ -10,12 +10,16 @@ const IMAGES_PER_PAGE = 20;
 const App = () => {
   const searchInput = useRef(null);
   const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1); // set up pagination\
-  const [totalPages, setTotalPages] = useState(0); // set up the images
+  const [page, setPage] = useState(0); // set up pagination\
+  const [totalPages, setTotalPages] = useState(1); // set up the images
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchImages = useCallback(async () => {
     try {
       if (searchInput.current.value) {
+        setErrorMsg('');
+        setLoading(true);
         const { data } = await axios.get(
           `${API_URL}?query=${
             searchInput.current.value
@@ -23,18 +27,19 @@ const App = () => {
             import.meta.env.VITE_API_KEY
           }`
         );
-        console.log('data', data);
         setImages(data.results);
         setTotalPages(data.total_pages);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }, [page]);
 
   useEffect(() => {
     fetchImages();
-  }, [fetchImages, page]);
+  }, [fetchImages]);
 
   const resetSearch = () => {
     setPage(1);
@@ -55,6 +60,7 @@ const App = () => {
   return (
     <div className='container'>
       <h1 className='title'>Image Search</h1>
+      {errorMsg && <p className='error-msg'>{errorMsg}</p>}
       <div className='search-section'>
         <Form onSubmit={handleSearch}>
           <Form.Control
@@ -72,23 +78,31 @@ const App = () => {
         <div onClick={() => handleSelection('cats')}>Cats</div>
         <div onClick={() => handleSelection('shoes')}>Shoes</div>
       </div>
-      <div className='images'>
-        {images.map(image => (
-          <img
-            key={image.id}
-            src={image.urls.small}
-            alt={image.alt_description}
-            className='image'
-          />
-        ))}
-      </div>
 
-      <div className='buttons'>
-        {page > 1 && (
-          <Button onClick={() => setPage(page - 1)}>Previous</Button>
-        )}
-        {page < totalPages && <Button onClick={() => setPage + 1}>Next</Button>}
-      </div>
+      {loading ? (
+        <p className='loading'>Loading...</p>
+      ) : (
+        <>
+          <div className='images'>
+            {images.map(image => (
+              <img
+                key={image.id}
+                src={image.urls.small}
+                alt={image.alt_description}
+                className='image'
+              />
+            ))}
+          </div>
+          <div className='buttons'>
+            {page > 1 && (
+              <Button onClick={() => setPage(page - 1)}>Previous</Button>
+            )}
+            {page < totalPages && (
+              <Button onClick={() => setPage(page + 1)}>Next</Button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
