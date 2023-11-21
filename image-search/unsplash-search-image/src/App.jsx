@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import './index.css';
 
 const API_URL = 'https://api.unsplash.com/search/photos';
@@ -9,7 +9,8 @@ const IMAGES_PER_PAGE = 20;
 const App = () => {
   const searchInput = useRef(null);
   const [images, setImages] = useState([]);
-  const [totalImages, setTotalImages] = useState(0);
+  const [totalImages, setTotalImages] = useState(0); // set up the images
+  const [page, setPage] = useState(1); // set up pagination
 
   const fetchImages = async () => {
     try {
@@ -68,6 +69,11 @@ const App = () => {
             className='image'
           />
         ))}
+      </div>
+
+      <div className='buttons'>
+        {page > 1 && <Button>Previous</Button>}
+        {page < totalImages && <Button>Next</Button>}
       </div>
     </div>
   );
