@@ -1,4 +1,5 @@
 import axios from 'axios';
+// eslint-disable-next-line no-unused-vars
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import './index.css';
@@ -9,25 +10,28 @@ const IMAGES_PER_PAGE = 20;
 const App = () => {
   const searchInput = useRef(null);
   const [images, setImages] = useState([]);
-  const [totalImages, setTotalImages] = useState(0); // set up the images
   const [page, setPage] = useState(1); // set up pagination\
+  const [totalPages, setTotalPages] = useState(0); // set up the images
 
   const fetchImages = useCallback(async () => {
     try {
-      const { data } = await axios.get(
-        `${API_URL}?query=${
-          searchInput.current.value
-        }&page=${page}&per_page=${IMAGES_PER_PAGE}&client_id=${
-          import.meta.env.VITE_API_KEY
-        }`
-      );
-      console.log('data', data);
-      setImages(data.results);
-      setTotalImages(data.total_pages);
+      if (searchInput.current.value) {
+        const { data } = await axios.get(
+          `${API_URL}?query=${
+            searchInput.current.value
+          }&page=${page}&per_page=${IMAGES_PER_PAGE}&client_id=${
+            import.meta.env.VITE_API_KEY
+          }`
+        );
+        console.log('data', data);
+        setImages(data.results);
+        setTotalPages(data.total_pages);
+      }
     } catch (error) {
       console.log(error);
     }
   }, [page]);
+
   useEffect(() => {
     fetchImages();
   }, [fetchImages, page]);
@@ -40,15 +44,11 @@ const App = () => {
   const handleSearch = event => {
     event.preventDefault();
     console.log(searchInput.current.value);
-    // fetchImages();
-    // setPage(1);
     resetSearch();
   };
 
   const handleSelection = selection => {
     searchInput.current.value = selection;
-    // fetchImages();
-    // setPage(1);
     resetSearch();
   };
 
@@ -87,9 +87,7 @@ const App = () => {
         {page > 1 && (
           <Button onClick={() => setPage(page - 1)}>Previous</Button>
         )}
-        {page < totalImages && (
-          <Button onClick={() => setPage + 1}>Next</Button>
-        )}
+        {page < totalPages && <Button onClick={() => setPage + 1}>Next</Button>}
       </div>
     </div>
   );
