@@ -101,7 +101,7 @@ body {
 
 .filters > * {
   padding: 5px 10px;
-  background: #3f3fd2;
+  background: #7373e1;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
@@ -132,6 +132,10 @@ body {
 
 .images .image:hover {
   transform: translateY(-3px);
+  -webkit-transform: translateY(-3px);
+  -moz-transform: translateY(-3px);
+  -ms-transform: translateY(-3px);
+  -o-transform: translateY(-3px);
 }
 
 /* images section ends */
